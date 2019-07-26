@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tabs, Icon, Layout } from 'antd';
 import WalletsContent from './wallets.content.component';
-import StatsContent from './stats.content.component';
 import TransactionsContent from './payments.content.component.jsx';
 
 const { Header, Footer, Content } = Layout;
@@ -17,14 +16,11 @@ class App extends React.Component {
                          src="./images/planet.png"
                          alt="Bitcoin Logo" />
 
-                    <h3>JSWallet - Electron Wallet for Bitcoin</h3>
+                    <h3>Pure Art</h3>
                 </Header>
                 <Content>
                     <div className="App">
                         <Tabs defaultActiveKey="2" style={{ padding: '16px' }}>
-                            <Tabs.TabPane tab={<span><Icon type="line-chart" />Price Charts</span>} key="1">
-                                <StatsContent />
-                            </Tabs.TabPane>
                             <Tabs.TabPane tab={<span><Icon type="wallet" />Wallets</span>} key="2">
                                 <WalletsContent />
                             </Tabs.TabPane>
@@ -34,10 +30,6 @@ class App extends React.Component {
                         </Tabs>
                     </div>
                 </Content>
-
-                <Footer>
-                    Developed by Michael Michailidis / Designs by Vecteezy
-                </Footer>
             </Layout>
 
         );

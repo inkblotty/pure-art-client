@@ -1,11 +1,8 @@
 import bip39 from 'bip39';
 import bitcoin from 'bitcoinjs-lib';
 import crypto from 'crypto';
-
 import EventEmitter from 'events';
-
 import Constants from './constants';
-
 import bnet from './network';
 import Database from './database';
 
@@ -16,12 +13,10 @@ class Wallet extends EventEmitter {
         this.__name = info.name;
         this.__address = info.address;
         this.__wif = info.wif;
+        this.__xpub = info.xpub;
         this.__network = info.network;
-
         this.__password = info.password || undefined;
-
         this.__utxos = [];
-
     }
 
     /**
@@ -41,7 +36,7 @@ class Wallet extends EventEmitter {
      * Coins are not set explicitly but through the unspent outputs
      * @returns {number|*}
      */
-    get coins() {
+    get balance() {
         return this.utxos.reduce((a, c) => a + c.value, 0) / Constants.Bitcoin.Satoshis;
     }
 
@@ -59,6 +54,10 @@ class Wallet extends EventEmitter {
 
     get wif() {
         return this.__wif;
+    }
+
+    get xpub() {
+        return this.__xpub;
     }
 
     get network() {
@@ -97,9 +96,7 @@ class Wallet extends EventEmitter {
         return password === this.__password;
     }
 
-
     send(btc, address, fee, password) {
-
         const satoshis = Math.round(btc * Constants.Bitcoin.Satoshis);
         const satoshis_fee = Math.round(fee * Constants.Bitcoin.Satoshis);
 
@@ -144,32 +141,31 @@ class Wallet extends EventEmitter {
         });
     }
 
-
     static generate() {
         return bip39.generateMnemonic();
     }
-
 
     static create(name, mnemonic) {
 
         const seed = bip39.mnemonicToSeed(mnemonic);
 
         const master = bitcoin.HDNode.fromSeedBuffer(seed, bnet.current);
+        const xpub = master.neutered().toBase58()
         const derived = master.derivePath(Wallet.Defaults.Path);
         const address = derived.getAddress();
         const wif = derived.keyPair.toWIF();
 
         return new Wallet({
-            name: name,
-            address: address,
-            wif: wif,
+            name,
+            address,
+            wif,
             network: bnet.name,
+            xpub
         });
 
     }
 
     update() {
-
         return bnet.api.getUnspentOutputs(this.address).then((result) => {
             this.utxos = result.utxos;
             this.emit(Wallet.Events.Updated);
@@ -192,11 +188,11 @@ class Wallet extends EventEmitter {
 
 
     toObject() {
-
         const obj = {
             name: this.name,
             address: this.address,
             wif: this.wif,
+            xpub: this.xpub,
             network: this.network,
         };
 
@@ -209,7 +205,7 @@ class Wallet extends EventEmitter {
 
 Wallet.Defaults = {
     Encryption: 'aes-256-cbc',
-    Path: "m/44'/0'/0'/0/0",
+    Path: "m/44'/0'/0'",
     DBFileName: 'wallets',
 };
 

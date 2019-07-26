@@ -1,3 +1,4 @@
+// TODO: swap out blockchain.info with blockcypher + superdoge, or my shit
 import { exchange, blockexplorer, pushtx } from 'blockchain.info';
 import bitcoin from 'bitcoinjs-lib';
 import axios from 'axios';

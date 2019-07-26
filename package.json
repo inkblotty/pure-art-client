@@ -47,8 +47,11 @@
     }
   },
   "dependencies": {
+    "@types/bignumber.js": "^5.0.0",
+    "@types/bitcoinjs-lib": "^4.0.1",
     "antd": "^3.2.0",
     "axios": "^0.18.0",
+    "bignumber.js": "^9.0.0",
     "bip39": "^2.5.0",
     "bitcoinjs-lib": "^3.3.2",
     "blockchain.info": "^2.11.0",

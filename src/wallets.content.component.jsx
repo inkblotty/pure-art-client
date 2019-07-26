@@ -136,7 +136,6 @@ class WalletsContent extends React.Component {
 
 
     handleSendit() {
-
         validateFormHashed(this.form).then((values) => {
 
             this.setState({ modalOpenSend: false });
@@ -181,9 +180,6 @@ class WalletsContent extends React.Component {
         this.state.wallets.forEach(w => w.update());
     }
 
-
-
-
     render() {
 
         const openSendModal = (event, record) => {
@@ -205,7 +201,7 @@ class WalletsContent extends React.Component {
 
         const onAddressClick = (event, record) => {
             clipboard.writeText(record.address);
-            message.success('Adress copied to the clipboard');
+            message.success('Address copied to the clipboard');
         };
 
 
@@ -216,7 +212,7 @@ class WalletsContent extends React.Component {
                         <span tabIndex={0}
                               role="button"
                               style={{ cursor: 'copy' }}
-                              onClick={e => onAddressClick(e, r)}>{r.address}</span>
+                              onClick={e => onAddressClick(e, r)}>{r.xpub}</span>
                     );
                 }
             },
@@ -241,11 +237,6 @@ class WalletsContent extends React.Component {
         return (
             <div className="Wallets">
                 <div style={{ marginBottom: '12px' }}>
-                    <Button
-                      type="primary"
-                      icon="down-square-o"
-                      onClick={() => this.setState({ modalOpenCreate: true, })}>Import
-                    </Button>
                     <Button
                       type="primary"
                       icon="plus-circle-o"
