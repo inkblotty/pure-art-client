@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Input, Form, Icon } from 'antd';
+import { Input, Form, Icon, Group, Radio, Button} from 'antd';
 
 class CreateForm extends React.Component {
 
@@ -55,6 +55,16 @@ class CreateForm extends React.Component {
                         }],
                     })(
                         <Input prefix={this.icons.wallet} placeholder="Wallet Name" />
+                    )}
+                </Form.Item>
+
+                <Form.Item label="Asset">
+                    {getFieldDecorator('asset')(
+                        <Radio.Group>
+                            <Radio.Button value="BTC">Bitcoin</Radio.Button>
+                            <Radio.Button value="LTC">Litecoin</Radio.Button>
+                            <Radio.Button value="DOGE">Dogecoin</Radio.Button>
+                        </Radio.Group>,
                     )}
                 </Form.Item>
 

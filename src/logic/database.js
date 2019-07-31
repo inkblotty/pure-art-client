@@ -1,11 +1,8 @@
 import Datastore from 'nedb';
-import Wallet from './wallet.class';
-
 
 class Database {
-
     constructor(name) {
-        this.db = new Datastore({ filename: `./db/${name}.db`, autoload: true });
+        this.db = new Datastore({ filename: `/Users/aarongreenspan/PureArt/pure-art-client/db/${name}.db`, autoload: true });
     }
 
     find(q) {
@@ -34,7 +31,7 @@ class Database {
             });
         });
     }
-
 }
 
-export default Database;
+const database = new Database('wallets');
+export default database;

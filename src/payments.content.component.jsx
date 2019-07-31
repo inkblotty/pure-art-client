@@ -4,7 +4,7 @@ import Datastore from 'nedb';
 import { Button, Icon, Table, Modal, message } from 'antd';
 
 import TransactionDisplay from './transaction.display';
-import Wallet from './logic/wallet.class';
+import { Wallet2 } from './logic/Wallet.js';
 import net from './logic/network';
 
 class PaymentsContent extends React.Component {
@@ -27,7 +27,7 @@ class PaymentsContent extends React.Component {
 
     componentDidMount() {
 
-        Wallet.all().then((wallets) => {
+        Wallet2.all('BTC').then((wallets) => {
 
             this.wallets = wallets;
 

@@ -1,5 +1,5 @@
 import { BlockchainApi } from './blockchainApi'
-import { Asset, Atomic, mkAtomic } from '../asset'
+import { Asset, Atomic, Canonic, mkAtomic, mkCanonic, USD } from '../asset'
 import { Address, Tx, Utxo } from '../types'
 import BigNumber from 'bignumber.js'
 
@@ -8,17 +8,21 @@ export class Blockcypher implements BlockchainApi {
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl
   }
-
-  getFee<T extends Asset>(t: T): Atomic<T> {
+  async getFee<T extends Asset>(t: T): Promise<Atomic<T>> {
     return mkAtomic(t, new BigNumber(1000))
   }
-  broadcast<T extends Asset>(t:T , tx: Tx<T>): boolean {
+  async getPrice<T extends Asset>(t: T): Promise<Canonic<USD>> {
+    return mkCanonic('USD', new BigNumber(10))
+  }
+  async broadcast<T extends Asset>(t:T , tx: Tx<T>): Promise<boolean> {
     return true
   }
-  getUtxos<T extends Asset>(t: T, address: Address<T>): Utxo<T>[] {
-    return undefined
+  async getUnspentOutputs<T extends Asset>(t: T, address: Address<T>): Promise<Utxo<T>[]> {
+    return []
   }
-  getTxs<T extends Asset> (t: T, address: Address<T>): Tx<T>[] {
-    return undefined
+  async getTransactions<T extends Asset> (t: T, address: Address<T>): Promise<Tx<T>[]> {
+    return []
   }
 }
+
+export const blockcypher = new Blockcypher("")
