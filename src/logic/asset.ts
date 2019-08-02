@@ -1,7 +1,10 @@
 import BigNumber from 'bignumber.js'
 const coininfo = require('coininfo')
 export type Asset = 'BTC' | 'BTC-T' | 'DOGE' | 'LTC'
+export const assets: Asset[] = ['BTC' , 'BTC-T' , 'DOGE' , 'LTC']
+
 export type USD = 'USD'
+
 export interface OfAsset<A extends Asset | USD> { asset: A }
 export interface AssetDetails<T extends Asset> extends OfAsset<T> {
   decimals: 8,
@@ -64,10 +67,12 @@ export interface Atomic<A extends Asset > extends CryptoVal<A, 'Atomic'> {val: B
 export function mkAtomic<A extends Asset> (a: A, val: BigNumber): Atomic<A> {
   return { asset: a, unit: 'Atomic', val }
 }
+
 export interface Canonic<A extends (Asset | USD) > extends CryptoVal<A, 'Canonic'> {val: BigNumber, unit: 'Canonic' }
 export function mkCanonic<A extends (Asset | USD) >(a: A, val: BigNumber): Canonic<A> {
   return { asset: a, unit: 'Canonic', val }
 }
+
 export function atomize<A extends Asset >(a : AssetDetails<A>, c : Canonic<A>): Atomic<A> {
   const decimals = a.decimals
   return mkAtomic(a.asset, c.val.times(decimals))
@@ -76,3 +81,17 @@ export function canonicalize<A extends Asset >(a : AssetDetails<A>, c : Atomic<A
   const decimals = a.decimals
   return mkCanonic(a.asset, c.val.dividedBy(decimals))
 }
+
+export function showCV<A extends Asset, U extends Unit>(cv : CryptoVal<A, U>): string {
+  switch(cv.unit){
+    case 'Atomic': return showCV(canonicalize(mkAssetDetails(cv.asset), cv as Atomic<A>))
+    case 'Canonic': return cv.val.toString() + "  " + cv.asset.toLowerCase()
+  }
+}
+
+
+// const bitcoinjs = require( 'bitcoinjs-lib' );
+//
+// const pubkey = Buffer.from( '0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352', 'hex' );
+// const { address } = bitcoinjs.payments.p2pkh({ pubkey });
+// console.log( address );

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var coininfo = require('coininfo');
+exports.assets = ['BTC', 'BTC-T', 'DOGE', 'LTC'];
 var Bitcoin = {
     decimals: 8,
     asset: 'BTC',
@@ -68,4 +69,16 @@ function canonicalize(a, c) {
     return mkCanonic(a.asset, c.val.dividedBy(decimals));
 }
 exports.canonicalize = canonicalize;
+function showCV(cv) {
+    switch (cv.unit) {
+        case 'Atomic': return showCV(canonicalize(mkAssetDetails(cv.asset), cv));
+        case 'Canonic': return cv.val.toString() + "  " + cv.asset.toLowerCase();
+    }
+}
+exports.showCV = showCV;
+// const bitcoinjs = require( 'bitcoinjs-lib' );
+//
+// const pubkey = Buffer.from( '0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352', 'hex' );
+// const { address } = bitcoinjs.payments.p2pkh({ pubkey });
+// console.log( address );
 //# sourceMappingURL=asset.js.map

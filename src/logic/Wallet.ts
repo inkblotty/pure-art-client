@@ -1,17 +1,20 @@
 import EventEmitter from "events"
 import BigNumber from 'bignumber.js'
-import { Address, DerivationPath, Utxo } from './types'
-import { Asset, AssetDetails, Canonic, canonicalize, cPlus, getAssetDetails, mkAssetDetails, mkAtomic } from './asset'
+import { Address, Utxo, Wif, Xpub } from './types'
+import { Asset, AssetDetails, Canonic, canonicalize, cPlus, mkAssetDetails, mkAtomic } from './asset'
 import * as bip39 from 'bip39'
 import * as crypto from "crypto"
 import database from './database';
 import { BlockchainApi } from './blockchainApi/blockchainApi'
+
 const bitcoin = require('bitcoinjs-lib')
 
 const DefaultEncryptionScheme = 'aes-256-cbc'
 const DefaultDBFileName = 'wallets'
-type Wif = string
-type Xpub = string
+
+export function showXpub(x : Xpub): string {
+  return x.substring(0, 35) + "...      ..." + x.substring(x.length-35)
+}
 
 interface WalletConstruction<A extends Asset> {
   name: string,
@@ -102,8 +105,14 @@ export class Wallet2<A extends Asset> extends EventEmitter {
     return Wallet2.dbStore;
   }
 
-  static async all<A extends Asset>(a: A): Promise<Wallet2<A>[]> {
+  static async allAsset<A extends Asset>(a: A): Promise<Wallet2<A>[]> {
     return Wallet2.store.find({ asset: a }).then((docs) => {
+      return docs.map(doc => new Wallet2(doc));
+    });
+  }
+
+  static async all(): Promise<Wallet2<Asset>[]> {
+    return Wallet2.store.find().then((docs) => {
       return docs.map(doc => new Wallet2(doc));
     });
   }
@@ -139,5 +148,5 @@ export class Wallet2<A extends Asset> extends EventEmitter {
 }
 
 type Event = string
-const WalletUpdated = 'updated'
-const WalletDeleted = 'deleted'
+export const WalletUpdated = 'updated'
+export const WalletDeleted = 'deleted'

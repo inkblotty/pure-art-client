@@ -27,7 +27,7 @@ class PaymentsContent extends React.Component {
 
     componentDidMount() {
 
-        Wallet2.all('BTC').then((wallets) => {
+        Wallet2.allAsset('BTC').then((wallets) => {
 
             this.wallets = wallets;
 

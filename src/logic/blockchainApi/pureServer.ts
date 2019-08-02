@@ -1,7 +1,8 @@
 import { BlockchainApi } from './blockchainApi'
 import { Asset, Atomic, Canonic, mkAtomic, mkCanonic, USD } from '../asset'
-import { Address, Tx, Utxo } from '../types'
+import { Address, Utxo } from '../types'
 import BigNumber from 'bignumber.js'
+import { Tx } from '../transaction'
 
 export class PureServer implements BlockchainApi {
   private readonly baseUrl: string

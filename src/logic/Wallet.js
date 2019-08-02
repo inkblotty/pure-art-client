@@ -67,6 +67,10 @@ var database_1 = __importDefault(require("./database"));
 var bitcoin = require('bitcoinjs-lib');
 var DefaultEncryptionScheme = 'aes-256-cbc';
 var DefaultDBFileName = 'wallets';
+function showXpub(x) {
+    return x.substring(0, 35) + "...      ..." + x.substring(x.length - 35);
+}
+exports.showXpub = showXpub;
 var Wallet2 = /** @class */ (function (_super) {
     __extends(Wallet2, _super);
     function Wallet2(info) {
@@ -130,10 +134,19 @@ var Wallet2 = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Wallet2.all = function (a) {
+    Wallet2.allAsset = function (a) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, Wallet2.store.find({ asset: a }).then(function (docs) {
+                        return docs.map(function (doc) { return new Wallet2(doc); });
+                    })];
+            });
+        });
+    };
+    Wallet2.all = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, Wallet2.store.find().then(function (docs) {
                         return docs.map(function (doc) { return new Wallet2(doc); });
                     })];
             });
@@ -182,6 +195,6 @@ var Wallet2 = /** @class */ (function (_super) {
     return Wallet2;
 }(events_1.default));
 exports.Wallet2 = Wallet2;
-var WalletUpdated = 'updated';
-var WalletDeleted = 'deleted';
+exports.WalletUpdated = 'updated';
+exports.WalletDeleted = 'deleted';
 //# sourceMappingURL=Wallet.js.map
